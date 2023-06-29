@@ -1,0 +1,32 @@
+{
+  "login": [
+    {
+      "id": 1,
+      "usuario": "admin",
+      "senha": "admin"
+    },
+    {
+      "id": 2,
+      "usuario": "joao",
+      "senha": "sdkgjhaljksgh"
+    }
+  ],
+  "produtos": [
+    {
+      "nome_produto": "Sapato masculino Coney Island",
+      "preco": "200.0",
+      "id": 1
+    },
+    {
+      "nome_produto": "Sapato feminino Brooklin",
+      "preco": "200.0",
+      "id": 2
+    },
+    {
+      "id": 3,
+      "nome_produto": "asfasfasfqwrqwerqw",
+      "preco": "5"
+    }
+  ],
+  "pedidos": []
+}
