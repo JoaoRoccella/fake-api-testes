@@ -8,28 +8,28 @@
 </head>
 
 <body>
-    
+
     <h1>Formulário do PUT</h1>
-    
+
     <div id="resposta"></div>
-    
+
     <form action="" method="post">
-        
+
         <label for="id">ID:</label>
         <input type="number" name="id" id="id"><br><br>
-        
+
         <label for="nome_produto">Nome do produto:</label>
         <input type="text" name="nome_produto" id="nome_produto"><br><br>
-        
+
         <label for="preco">Preço:</label>
         <input type="text" name="preco" id="preco"><br><br>
-        
+
         <button type="button" id="btnAtualizar">Atualizar</button>
-        
+
     </form>
-    
+
     <div id="listaProdutos"></div>
-    
+
     <script>
 
         document.querySelector('#btnAtualizar').addEventListener('click', () => {
@@ -51,53 +51,62 @@
                 },
                 body: JSON.stringify(dados)
             })
-            .then(resposta => resposta.json())
-            .then(resposta => JSON.stringify(resposta))
-            .then(resposta => {
-                document.querySelector('#resposta').innerHTML = resposta;
-                
-            });
-                
+                .then(resposta => resposta.json())
+                .then(resposta => JSON.stringify(resposta))
+                .then(resposta => JSON.parse(resposta))
+                .then(resposta => {
+                    
+                    document.querySelector('#resposta')
+                        .innerHTML = `Produto atualizado. Nome: ${resposta.nome_produto} | Preço: ${resposta.preco}`;
+
+                    getProdutos();
+                });
+
         });
 
         function getProdutos() {
-            
+
             fetch(`http://localhost:3000/produtos`, {
                 method: "GET",
                 headers: {
                     'Content-type': 'application/json',
                 }
             })
-            .then(resposta => resposta.json())
-            .then(resposta => JSON.stringify(resposta))
-            .then(resposta => JSON.parse(resposta))
-            .then(resposta => {
-                
-                const lista = document.querySelector('#listaProdutos');
-                
-                lista.appendChild(document.createElement("table")).classList.add('tabelaProdutos');
+                .then(resposta => resposta.json())
+                .then(resposta => JSON.stringify(resposta))
+                .then(resposta => JSON.parse(resposta))
+                .then(resposta => {
 
-                resposta.forEach(linha => {
-                    
-                    document.querySelector('.tabelaProdutos')
-                    .appendChild(document.createElement("tr"))
-                    .setAttribute('id',linha.id);
-                    
-                    document.getElementById(linha.id)
-                    .appendChild(document.createElement("td"))
-                    .innerHTML = linha.id;
-                    
-                    document.getElementById(linha.id)
-                    .appendChild(document.createElement("td"))
-                    .innerHTML = linha.nome_produto;
-                    
-                    document.getElementById(linha.id)
-                    .appendChild(document.createElement("td"))
-                    .innerHTML = linha.preco;
-                    
-                })
-                
-            });
+                    const lista = document.querySelector('#listaProdutos');
+
+                    if (lista.hasChildNodes()) {
+                        lista.removeChild(document.querySelector('.tabelaProdutos'));
+                    }
+
+                    lista.appendChild(document.createElement("table"))
+                        .classList.add('tabelaProdutos');
+
+                    resposta.forEach(linha => {
+
+                        document.querySelector('.tabelaProdutos')
+                            .appendChild(document.createElement("tr"))
+                            .setAttribute('id', linha.id);
+
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.id;
+
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.nome_produto;
+
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.preco;
+
+                    })
+
+                });
         }
 
         getProdutos();
