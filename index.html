@@ -15,6 +15,22 @@
         <li><a href="./update.html">Update: PUT</a></li>
         <li><a href="./delete.html">Delete: DETETE</a></li>
     </ul>
+
+    <script>
+        const requisicao = new Request('http://localhost:3000/produtos/', {
+            method: "GET", // <- Definimos o método HTTP para GET.
+            headers: {     // <- Definimos o header da requisição para JSON.
+                'Content-type': 'application/json',
+            }
+        })
+
+        fetch(requisicao)
+            // .then(response => response.json())
+            // .then(response => JSON.stringify(response))
+            .then(response => {
+                console.log(response)
+            })
+    </script>
 </body>
 
 </html>

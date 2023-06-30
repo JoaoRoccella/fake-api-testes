@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Método POST</title>
+</head>
+
+<body>
+
+    <h1>Método POST</h1>
+    <h2>Utilizando um formulário para enviar dados com o método POST</h2>
+
+    <!-- Nesta div será colocada a resposta à requisição do
+     PUT para mostrar o produto que foi alterado. -->
+    <div id="resposta"></div>
+
+    <!-- Este formulário serve apenas para preencher os dados
+     que serão usados pelo JavaScript. Note que o método é
+     o POST, mas nesse caso, tanto faz... -->
+    <form action="" method="post">
+
+        <!-- Perceba que os campos precisam de um ID para que o 
+         JavaScript possa encontrá-los de forma mais precisa. -->
+        <label for="id">ID:</label>
+        <input type="number" id="id" disabled><br><br>
+
+        <label for="nome_produto">Nome do produto:</label>
+        <input type="text" id="nome_produto"><br><br>
+
+        <label for="preco">Preço:</label>
+        <input type="text" id="preco"><br><br>
+
+        <button type="button" id="btnCadastrar">Cadastrar</button>
+
+    </form>
+
+
+    <!-- Nesta div será colocada a resposta à requisição do 
+     GET para exibir os produtos já cadastrados na API. -->
+    <div id="listaProdutos"></div>
+
+
+    <script>
+        /* Criando uma escuta de evento para o click no botão */
+        document.querySelector('#btnCadastrar').addEventListener('click', () => {
+
+            /* Aqui, pegamos as informações que estão no formulário e
+             armazenamos em variáveis no JavaScript para usarmos logo mais. */
+            const id = document.querySelector('#id').value;
+            const nome_produto = document.querySelector('#nome_produto').value;
+            const preco = document.querySelector('#preco').value;
+
+            /* Definindo o modelo de dados que será transmitido e atribuindo
+             os dados para cada chave do nosso modelo. */
+            const dados = {
+                "id": null,
+                "nome_produto": nome_produto,
+                "preco": preco
+            };
+
+            /* Aqui faremos a requisição e o tratamento da resposta */
+            fetch(`http://localhost:3000/produtos`, {
+                method: "POST", // <- Definimos o método HTTP para PUT.
+                headers: {     // <- Definimos o header da requisição para JSON.
+                    'Content-type': 'application/json', 
+                },    
+                body: JSON.stringify(dados)  // <- No corpo da requisição vão os nossos dados.
+            })
+                .then(resposta => resposta.json())          // <- Obtendo o JSON de dentro da resposta...
+                .then(resposta => JSON.stringify(resposta)) // <- ...transformando em strings...
+                .then(resposta => JSON.parse(resposta))     // <- ...transformando em chave-valor...
+                .then(resposta => {         // <- ... e finalmente trabalhando com o resultado.
+                    
+                    /* Aqui, obtemos o elemento HTML que receberá a resposta 
+                     e colocamos dentro dele (innerHTML) o conteúdo da resposta,
+                     já formatado como queremos. */
+                    document.querySelector('#resposta')
+                        .innerHTML = `Produto inserido. Nome: ${resposta.nome_produto} | Preço: ${resposta.preco}`;
+
+                    // Após isso, obtemos a lista dos produtos novamente.
+                    getProdutos();
+                });
+
+        });
+
+        // Esta função fará a busca dos produtos já cadastrados
+        function getProdutos() {
+
+            /* Aqui faremos a requisição e o tratamento da resposta */
+            fetch(`http://localhost:3000/produtos`, {
+                method: "GET", // <- definimos o método HTTP para PUT
+                headers: {     // <- definimos o header da requisição para JSON
+                    'Content-type': 'application/json',
+                }
+            })
+                .then(resposta => resposta.json())          // <- Obtendo o JSON de dentro da resposta...
+                .then(resposta => JSON.stringify(resposta)) // <- ...transformando em strings...
+                .then(resposta => JSON.parse(resposta))     // <- ...transformando em chave-valor...
+                .then(resposta => {         // <- e finalmente trabalhando com o resultado.
+
+                    // Obtemos o elemento que receberá a lista de produtos.
+                    const lista = document.querySelector('#listaProdutos');
+                    
+                    // Cria o título da lista de produtos e o adiciona antes da div
+                    const tituloLista = document.createElement("h2");
+                    tituloLista.classList.add('tituloLista');
+                    tituloLista.innerHTML = "Lista de produtos";
+
+                    lista.parentNode.insertBefore(tituloLista, lista);
+
+                    /* Se esse elemento já tiver dados (tabela), esses dados devem ser 
+                     removidos antes, para que seja colocada a informação atualizada. */
+                    if (lista.hasChildNodes()) {
+                        lista.removeChild(document.querySelector('.tabelaProdutos'));
+                        // Remove também o título da seção
+                        document.querySelector('.tituloLista').remove();
+                    }
+
+                    /* Em seguida, criamos um novo elemento filho (appendChild), a tabela
+                     que servirá de estrutura para apresentar os dados. Essa estrutura
+                     pode ser de outro tipo. Aplicamos uma classe a essa tabela na mesma
+                     instrução.*/
+                    lista.appendChild(document.createElement("table"))
+                        .classList.add('tabelaProdutos');
+
+                    // Para cada linha (nós é que damos esse nome à variável)...
+                    resposta.forEach(linha => {
+
+                        /* Selecione a linha da tabela criada e inclua um filho (appendChild)
+                         do tipo <tr></tr> e atribua o ID igual ao número da linha (da 
+                         resposta JSON que foi tratada acima, lembra?) */
+                        document.querySelector('.tabelaProdutos')
+                            .appendChild(document.createElement("tr"))
+                            .setAttribute('id', linha.id);
+
+                        /* Selecione o elemento da linha pelo ID (que foi atribuído acima e
+                         adicione um elemento filho do tipo <td></td>, já definindo que o
+                         seu interior (innerHTML) será o atributo id da nossa linha. */
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.id;
+
+                        // Idem para o atributo nome_produto
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.nome_produto;
+                        
+                        // Idem para o atributo preco
+                        document.getElementById(linha.id)
+                            .appendChild(document.createElement("td"))
+                            .innerHTML = linha.preco;
+
+                    })
+
+                });
+        }
+
+        // Ao final, obtém a lista de produtos cada vez que a página é aberta,
+        // realizando ou não alterações nos produtos.
+        getProdutos();
+
+    </script>
+</body>
+
+</html>

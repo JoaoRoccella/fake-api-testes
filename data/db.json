@@ -26,6 +26,11 @@
       "id": 3,
       "nome_produto": "Sapato feminino Bronx",
       "preco": "199.99"
+    },
+    {
+      "id": 4,
+      "nome_produto": "Sapato infantil Central Park",
+      "preco": "42.99"
     }
   ],
   "pedidos": []
