@@ -36,6 +36,7 @@
 
     </form>
 
+
     <!-- Nesta div será colocada a resposta à requisição do 
      GET para exibir os produtos já cadastrados na API. -->
     <div id="listaProdutos"></div>
@@ -101,11 +102,20 @@
 
                     // Obtemos o elemento que receberá a lista de produtos.
                     const lista = document.querySelector('#listaProdutos');
+                    
+                    // Cria o título da lista de produtos e o adiciona antes da div
+                    const tituloLista = document.createElement("h2");
+                    tituloLista.classList.add('tituloLista');
+                    tituloLista.innerHTML = "Lista de produtos";
+
+                    lista.parentNode.insertBefore(tituloLista, lista);
 
                     /* Se esse elemento já tiver dados (tabela), esses dados devem ser 
                      removidos antes, para que seja colocada a informação atualizada. */
                     if (lista.hasChildNodes()) {
                         lista.removeChild(document.querySelector('.tabelaProdutos'));
+                        // Remove também o título da seção
+                        document.querySelector('.tituloLista').remove();
                     }
 
                     /* Em seguida, criamos um novo elemento filho (appendChild), a tabela

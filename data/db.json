@@ -13,14 +13,14 @@
   ],
   "produtos": [
     {
-      "nome_produto": "Sapato masculino Coney Island",
-      "preco": "200.0",
-      "id": 1
+      "id": 1,
+      "nome_produto": "1",
+      "preco": "1"
     },
     {
-      "nome_produto": "Sapato feminino Brooklin",
-      "preco": "200.0",
-      "id": 2
+      "id": 2,
+      "nome_produto": "2",
+      "preco": "2"
     },
     {
       "id": 3,
