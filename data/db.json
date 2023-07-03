@@ -14,13 +14,13 @@
   "produtos": [
     {
       "id": 1,
-      "nome_produto": "1",
-      "preco": "1"
+      "nome_produto": "Sapato marrom",
+      "preco": "159.99"
     },
     {
       "id": 2,
-      "nome_produto": "2",
-      "preco": "2"
+      "nome_produto": "Sapato branco",
+      "preco": "159.99"
     },
     {
       "id": 3,
